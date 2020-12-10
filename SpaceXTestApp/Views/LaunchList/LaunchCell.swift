@@ -29,21 +29,15 @@ class LaunchCell: UICollectionViewCell {
         return view
     }()
     
-    lazy var imageViewFrame: UIView = {
-        let view = UIView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderWidth = 0.7
-        view.layer.cornerRadius = 10
-        view.layer.borderColor = UIColor.white.cgColor
-        return view
-    }()
-    
     lazy var imageView: UIImageView = {
         let imgView = UIImageView(frame: .zero)
         imgView.translatesAutoresizingMaskIntoConstraints = false
-        imgView.contentMode = .scaleAspectFit
+        imgView.contentMode = .scaleAspectFill
         imgView.clipsToBounds = true
         imgView.backgroundColor = .clear
+        imgView.layer.borderWidth = 0.7
+        imgView.layer.cornerRadius = 10
+        imgView.layer.borderColor = UIColor.white.cgColor
         return imgView
     }()
     
@@ -70,14 +64,12 @@ class LaunchCell: UICollectionViewCell {
     // MARK: Methods
     private func setupCell() {
         self.addSubview(self.delimiterView)
-        self.addSubview(self.imageViewFrame)
         self.addSubview(self.imageView)
         self.addSubview(self.detailsView)
         self.addSubview(self.button)
         
         self.setupDelimiterViewLayout()
         self.setupButtonLayout()
-        self.setupImageViewFrameLayout()
         self.setupImageViewLayout()
         self.setupDetailsViewLayout()
     }
@@ -100,30 +92,21 @@ class LaunchCell: UICollectionViewCell {
         ])
     }
     
-    private func setupImageViewFrameLayout() {
-        NSLayoutConstraint.activate([
-            self.imageViewFrame.topAnchor.constraint(equalTo: self.delimiterView.bottomAnchor, constant: 2),
-            self.imageViewFrame.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            self.imageViewFrame.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            self.imageViewFrame.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.75)
-        ])
-    }
-    
     private func setupImageViewLayout() {
         NSLayoutConstraint.activate([
-            self.imageView.topAnchor.constraint(equalTo: self.imageViewFrame.topAnchor, constant: 1),
-            self.imageView.bottomAnchor.constraint(equalTo: self.imageViewFrame.bottomAnchor, constant: -1),
-            self.imageView.leadingAnchor.constraint(equalTo: self.imageViewFrame.leadingAnchor, constant: 1),
-            self.imageView.trailingAnchor.constraint(equalTo: self.imageViewFrame.trailingAnchor, constant: -1)
+            self.imageView.topAnchor.constraint(equalTo: self.delimiterView.bottomAnchor, constant: 2),
+            self.imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
+            self.imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
+            self.imageView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.75)
         ])
     }
     
     private func setupDetailsViewLayout() {
         NSLayoutConstraint.activate([
-            self.detailsView.topAnchor.constraint(equalTo: self.imageViewFrame.bottomAnchor, constant: 5),
+            self.detailsView.topAnchor.constraint(equalTo: self.imageView.bottomAnchor, constant: 5),
             self.detailsView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
-            self.detailsView.leadingAnchor.constraint(equalTo: self.imageViewFrame.leadingAnchor),
-            self.detailsView.trailingAnchor.constraint(equalTo: self.imageViewFrame.trailingAnchor)
+            self.detailsView.leadingAnchor.constraint(equalTo: self.imageView.leadingAnchor),
+            self.detailsView.trailingAnchor.constraint(equalTo: self.imageView.trailingAnchor)
         ])
     }
 }
@@ -133,8 +116,15 @@ extension LaunchCell {
     func setupCellData(withData cellData: LaunchData) {
         self.launchDetails = cellData
         
-        if let largeImageLink = cellData.patchData?.large {
-            self.setupImageView(from: largeImageLink)
+        // Check if there are any images from flickr, if not then download image from patch
+        if let originalImageLink = cellData.flickrImages?.original.first {
+            self.setupImageView(from: originalImageLink)
+        } else if let smallImageLink = cellData.flickrImages?.small.first {
+            self.setupImageView(from: smallImageLink)
+        } else {
+            if let largeImageLink = cellData.patchData?.large {
+                self.setupImageView(from: largeImageLink)
+            }
         }
         
         self.detailsView.setupLabelTitles(title: cellData.name!, date: cellData.date!)

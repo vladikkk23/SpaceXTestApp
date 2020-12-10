@@ -62,7 +62,7 @@ class LaunchListVC: UIViewController {
         // Add collection view to super view
         self.view.addSubview(self.launchesView)
         
-        // Setup layput constraints
+        // Setup layout constraints
         self.setupLayout()
     }
 }
@@ -77,7 +77,7 @@ extension LaunchListVC {
         NSLayoutConstraint.activate([
             self.launchesView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.launchesView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            self.launchesView.heightAnchor.constraint(equalTo: self.view.heightAnchor),
+            self.launchesView.heightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.heightAnchor),
             self.launchesView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
         ])
     }
@@ -115,7 +115,7 @@ extension LaunchListVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // Setup cell size
         let size = self.launchesView.frame.size
-        return CGSize(width: size.width, height: size.height * 0.25)
+        return CGSize(width: size.width, height: size.height * 0.4)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

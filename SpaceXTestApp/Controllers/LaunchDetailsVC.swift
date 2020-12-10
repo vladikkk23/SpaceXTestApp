@@ -6,23 +6,29 @@
 //
 
 import UIKit
+import WebKit
+import AVFoundation
 
 class LaunchDetailsVC: UIViewController {
     // MARK: Properties
     var launchDetails: LaunchData?
     
     // UI
-    lazy var playerView: UIView = {
-        let view = UIView(frame: .zero)
+    lazy var playerView: WKWebView = {
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.allowsInlineMediaPlayback = true
+        let view = WKWebView(frame: .zero, configuration: webConfiguration)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .clear
         return view
     }()
     
-    lazy var detailsView: UIView = {
-        let view = UIView(frame: .zero)
+    private var playerLayer = AVPlayerLayer()
+    
+    lazy var detailsView: LaunchDetailsView = {
+        let view = LaunchDetailsView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = .darkGray
         return view
     }()
     
@@ -34,13 +40,31 @@ class LaunchDetailsVC: UIViewController {
             // Setup nav bar title
             self.title = details.name
             
+            // Load video
+//            self.playWebVideo(urlString: self.launchDetails!.videoLink!)
+            
             // Setup labels, description and video player
+            self.detailsView.setupLabelTitle()
+            self.detailsView.setupDateLabelTitle(withTitle: details.date!)
+            self.detailsView.setupDescriptionTextView(withTitle: details.description!)
+            self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName!)
+            self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads?.first ?? "No payloads")
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .darkGray
+        
+        // Add views to superview
+        self.view.addSubview(self.playerView)
+        self.view.addSubview(self.detailsView)
+        
+        // Setup layout constraints
+        self.setupLayout()
+        
+        // Load video
+        self.playWebVideo(urlString: self.launchDetails!.videoLink!)
     }
 }
 
@@ -48,20 +72,38 @@ class LaunchDetailsVC: UIViewController {
 extension LaunchDetailsVC {
     private func setupLayout() {
         self.setupLaunchesViewLayout()
+        self.setupDetailsViewLayout()
     }
     
     private func setupLaunchesViewLayout() {
         NSLayoutConstraint.activate([
             self.playerView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.playerView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.playerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4),
+            self.playerView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.playerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.3),
             self.playerView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
         ])
     }
     
-//    private func setupDetailsViewLayout() {
-//        NSLayoutConstraint.activate([
-//            self.detailsView.
-//        ])
-//    }
+    private func setupDetailsViewLayout() {
+        NSLayoutConstraint.activate([
+            self.detailsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.detailsView.topAnchor.constraint(equalTo: self.playerView.bottomAnchor, constant: 30),
+            self.detailsView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.detailsView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+        ])
+    }
+}
+
+// Setup video player
+extension LaunchDetailsVC {
+    func playWebVideo(urlString: String) {
+        guard let videoURL = URL(string: urlString) else {
+            NSLog("Failed to create url: \(#line)")
+
+            return
+        }
+
+        let request = URLRequest(url: videoURL)
+        self.playerView.load(request)
+    }
 }
