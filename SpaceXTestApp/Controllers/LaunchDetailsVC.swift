@@ -6,19 +6,24 @@
 //
 
 import UIKit
-import AVKit
+import WebKit
+import AVFoundation
 
 class LaunchDetailsVC: UIViewController {
     // MARK: Properties
     var launchDetails: LaunchData?
     
     // UI
-    lazy var playerView: UIView = {
-        let view = UIView(frame: .zero)
+    lazy var playerView: WKWebView = {
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.allowsInlineMediaPlayback = true
+        let view = WKWebView(frame: .zero, configuration: webConfiguration)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .clear
         return view
     }()
+    
+    private var playerLayer = AVPlayerLayer()
     
     lazy var detailsView: LaunchDetailsView = {
         let view = LaunchDetailsView(frame: .zero)
@@ -30,11 +35,14 @@ class LaunchDetailsVC: UIViewController {
     // MARK: Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         if let details = self.launchDetails {
             // Setup nav bar title
             self.title = details.name
-
+            
+            // Load video
+//            self.playWebVideo(urlString: self.launchDetails!.videoLink!)
+            
             // Setup labels, description and video player
             self.detailsView.setupLabelTitle()
             self.detailsView.setupDateLabelTitle(withTitle: details.date!)
@@ -48,13 +56,15 @@ class LaunchDetailsVC: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .darkGray
         
-        
         // Add views to superview
         self.view.addSubview(self.playerView)
         self.view.addSubview(self.detailsView)
         
         // Setup layout constraints
         self.setupLayout()
+        
+        // Load video
+        self.playWebVideo(urlString: self.launchDetails!.videoLink!)
     }
 }
 
@@ -81,5 +91,19 @@ extension LaunchDetailsVC {
             self.detailsView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             self.detailsView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
         ])
+    }
+}
+
+// Setup video player
+extension LaunchDetailsVC {
+    func playWebVideo(urlString: String) {
+        guard let videoURL = URL(string: urlString) else {
+            NSLog("Failed to create url: \(#line)")
+
+            return
+        }
+
+        let request = URLRequest(url: videoURL)
+        self.playerView.load(request)
     }
 }

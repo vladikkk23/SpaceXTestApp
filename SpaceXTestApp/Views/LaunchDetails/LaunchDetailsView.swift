@@ -22,6 +22,7 @@ class LaunchDetailsView: UIView {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textAlignment = .center
         textView.backgroundColor = .clear
+        textView.isUserInteractionEnabled = false
         return textView
     }()
     
@@ -30,6 +31,7 @@ class LaunchDetailsView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.backgroundColor = .clear
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -38,6 +40,7 @@ class LaunchDetailsView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.backgroundColor = .clear
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -97,7 +100,7 @@ class LaunchDetailsView: UIView {
             self.rocketNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.rocketNameLabel.bottomAnchor.constraint(equalTo: self.payloadsLabel.topAnchor, constant: -5),
             self.rocketNameLabel.heightAnchor.constraint(equalToConstant: 30),
-            self.rocketNameLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6)
+            self.rocketNameLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8)
         ])
     }
     
@@ -106,7 +109,7 @@ class LaunchDetailsView: UIView {
             self.payloadsLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             self.payloadsLabel.bottomAnchor.constraint(equalTo: self.linkLabel.topAnchor, constant: -20),
             self.payloadsLabel.heightAnchor.constraint(equalToConstant: 30),
-            self.payloadsLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6)
+            self.payloadsLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8)
         ])
     }
     

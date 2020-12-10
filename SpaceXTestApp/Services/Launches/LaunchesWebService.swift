@@ -50,8 +50,8 @@ class LaunchesWebService {
                 launchData.patchData = images
             }
             
-            if let videoLink = try? decoder.decode(String.self, from: data, keyPath: "links.webcast") {
-                launchData.videoLink = videoLink
+            if let videoLink = try? decoder.decode(String.self, from: data, keyPath: "links.youtube_id") {
+                launchData.videoLink = "https://www.youtube.com/embed/\(videoLink)"
             }
             
             if let description = try? decoder.decode(String.self, from: data, keyPath: "details") {
