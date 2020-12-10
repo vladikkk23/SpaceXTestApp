@@ -11,7 +11,7 @@ import AVFoundation
 
 class LaunchDetailsVC: UIViewController {
     // MARK: Properties
-    var launchDetails: LaunchData?
+    var launchDetails: LaunchDataResponse?
     
     // UI
     lazy var playerView: WKWebView = {
@@ -45,10 +45,10 @@ class LaunchDetailsVC: UIViewController {
             
             // Setup labels, description and video player
             self.detailsView.setupLabelTitle()
-            self.detailsView.setupDateLabelTitle(withTitle: details.date!)
-            self.detailsView.setupDescriptionTextView(withTitle: details.description!)
-            self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName!)
-            self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads?.first ?? "No payloads")
+            self.detailsView.setupDateLabelTitle(withTitle: details.date.description)
+            self.detailsView.setupDescriptionTextView(withTitle: details.desc!)
+            self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName)
+            self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads.first ?? "No payloads")
         }
     }
     
@@ -64,7 +64,7 @@ class LaunchDetailsVC: UIViewController {
         self.setupLayout()
         
         // Load video
-        self.playWebVideo(urlString: self.launchDetails!.videoLink!)
+//        self.playWebVideo(urlString: self.launchDetails!.videoLink!)
     }
 }
 

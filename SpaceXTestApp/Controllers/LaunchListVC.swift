@@ -9,7 +9,7 @@ import UIKit
 
 class LaunchListVC: UIViewController {
     // MARK: Properties
-    private var launches = [LaunchData]()
+    private var launches = [LaunchDataResponse]()
     
     // Create a collection view with vertical scroll and custom layout config
     lazy var launchesView: UICollectionView = {
@@ -34,11 +34,13 @@ class LaunchListVC: UIViewController {
         let launchesWS = LaunchesWebService()
         
         DispatchQueue.global(qos: .background).async {
-            launchesWS.getLaunches { (resp) in
+            launchesWS.getLaunch { (resp) in
                 if let launches = resp {
                     DispatchQueue.main.async {
                         // Store data
-                        self.launches = [launches]
+                        self.launches = launches
+                        
+                        print(launches)
                         
                         // Reload collection view
                         self.launchesView.reloadData()
