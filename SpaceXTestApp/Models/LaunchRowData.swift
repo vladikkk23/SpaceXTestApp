@@ -11,9 +11,11 @@ struct LaunchData {
     var name: String?
     var date: String?
     var patchData: PatchData?
+    var flickrImages: FlickrData?
     
     var videoLink: String?
     var description: String?
     var rocketName: String?
     var payloads: [String]?
+    var wikipediaLink: String?
 }

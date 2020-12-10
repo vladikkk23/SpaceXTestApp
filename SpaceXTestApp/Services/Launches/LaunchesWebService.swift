@@ -33,7 +33,7 @@ class LaunchesWebService {
             }
             
             if let unixDate = try? decoder.decode(Int.self, from: data, keyPath: "date_unix") {
-                // format date
+                // Format date
                 let date = Date(timeIntervalSince1970: Double(unixDate))
                 let dateFormatter = DateFormatter()
                 dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
@@ -44,7 +44,9 @@ class LaunchesWebService {
                 launchData.date = strDate
             }
             
-            if let images = try? decoder.decode(PatchData.self, from: data, keyPath: "links.patch") {
+            if let flickrImages = try? decoder.decode(FlickrData.self, from: data, keyPath: "links.flickr") {
+                launchData.flickrImages = flickrImages
+            } else if let images = try? decoder.decode(PatchData.self, from: data, keyPath: "links.patch") {
                 launchData.patchData = images
             }
             
@@ -62,6 +64,10 @@ class LaunchesWebService {
             
             if let payloads = try? decoder.decode([String].self, from: data, keyPath: "payloads"), !payloads.isEmpty {
                 launchData.payloads = payloads
+            }
+            
+            if let link = try? decoder.decode(String.self, from: data, keyPath: "links.wikipedia") {
+                launchData.wikipediaLink = link
             }
             
             // Parse data to controller

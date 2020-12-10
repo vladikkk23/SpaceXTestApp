@@ -72,6 +72,7 @@ class LaunchRowDetailsView: UIView {
     }
 }
 
+// Setup labels
 extension LaunchRowDetailsView {
     func setupLabelTitles(title: String, date: String) {
         self.setupTitleLabelTitle(withTitle: title)

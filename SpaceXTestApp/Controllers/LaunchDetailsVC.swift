@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVKit
 
 class LaunchDetailsVC: UIViewController {
     // MARK: Properties
@@ -19,28 +20,41 @@ class LaunchDetailsVC: UIViewController {
         return view
     }()
     
-    lazy var detailsView: UIView = {
-        let view = UIView(frame: .zero)
+    lazy var detailsView: LaunchDetailsView = {
+        let view = LaunchDetailsView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = .darkGray
         return view
     }()
     
     // MARK: Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let details = self.launchDetails {
             // Setup nav bar title
             self.title = details.name
-            
+
             // Setup labels, description and video player
+            self.detailsView.setupLabelTitle()
+            self.detailsView.setupDateLabelTitle(withTitle: details.date!)
+            self.detailsView.setupDescriptionTextView(withTitle: details.description!)
+            self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName!)
+            self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads?.first ?? "No payloads")
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .darkGray
+        
+        
+        // Add views to superview
+        self.view.addSubview(self.playerView)
+        self.view.addSubview(self.detailsView)
+        
+        // Setup layout constraints
+        self.setupLayout()
     }
 }
 
@@ -48,20 +62,24 @@ class LaunchDetailsVC: UIViewController {
 extension LaunchDetailsVC {
     private func setupLayout() {
         self.setupLaunchesViewLayout()
+        self.setupDetailsViewLayout()
     }
     
     private func setupLaunchesViewLayout() {
         NSLayoutConstraint.activate([
             self.playerView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            self.playerView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.playerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.4),
+            self.playerView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.playerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.3),
             self.playerView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
         ])
     }
     
-//    private func setupDetailsViewLayout() {
-//        NSLayoutConstraint.activate([
-//            self.detailsView.
-//        ])
-//    }
+    private func setupDetailsViewLayout() {
+        NSLayoutConstraint.activate([
+            self.detailsView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.detailsView.topAnchor.constraint(equalTo: self.playerView.bottomAnchor, constant: 30),
+            self.detailsView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.detailsView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+        ])
+    }
 }

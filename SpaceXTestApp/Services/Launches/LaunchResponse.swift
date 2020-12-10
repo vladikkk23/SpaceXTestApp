@@ -7,8 +7,14 @@
 
 import Foundation
 
-// MARK: Patch
+// MARK: - Patch
 struct PatchData: Codable {
     let small: String
     let large: String
+}
+
+// MARK: - FlickrData
+struct FlickrData: Codable {
+    let small: [String]
+    let original: [String]
 }
