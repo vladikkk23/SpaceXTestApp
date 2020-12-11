@@ -42,7 +42,7 @@ class LaunchDetailsVC: UIViewController {
             
             // Setup labels, description and video player
             self.detailsView.setupLabelTitle()
-            self.detailsView.setupDateLabelTitle(withTitle: details.date.description)
+            self.detailsView.setupDateLabelTitle(withTitle: details.date)
             self.detailsView.setupDescriptionTextView(withTitle: details.desc ?? "No Description")
             self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName)
             self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads.first ?? "No payloads")
