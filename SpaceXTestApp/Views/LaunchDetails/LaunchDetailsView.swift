@@ -150,13 +150,13 @@ extension LaunchDetailsView: UITextFieldDelegate {
     @objc private func openLink() {
         guard let vc = self.findViewController() as? LaunchDetailsVC else { return }
         
-//        if let stringURL = vc.launchDetails?.wikipediaLink {
-//            guard let url = URL(string: stringURL) else { return }
-//            
-//            if UIApplication.shared.canOpenURL(url) {
-//                UIApplication.shared.open(url)
-//            }
-//        }
+        if let stringURL = vc.launchDetails?.links.wikipediaLink {
+            guard let url = URL(string: stringURL) else { return }
+            
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url)
+            }
+        }
     }
 }
 

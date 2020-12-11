@@ -40,13 +40,10 @@ class LaunchDetailsVC: UIViewController {
             // Setup nav bar title
             self.title = details.name
             
-            // Load video
-//            self.playWebVideo(urlString: self.launchDetails!.videoLink!)
-            
             // Setup labels, description and video player
             self.detailsView.setupLabelTitle()
             self.detailsView.setupDateLabelTitle(withTitle: details.date.description)
-            self.detailsView.setupDescriptionTextView(withTitle: details.desc!)
+            self.detailsView.setupDescriptionTextView(withTitle: details.desc ?? "No Description")
             self.detailsView.setupRocketNameLabelTitle(withTitle: details.rocketName)
             self.detailsView.setupPayloadsLabelTitle(withTitle: details.payloads.first ?? "No payloads")
         }
@@ -64,7 +61,9 @@ class LaunchDetailsVC: UIViewController {
         self.setupLayout()
         
         // Load video
-//        self.playWebVideo(urlString: self.launchDetails!.videoLink!)
+        if let urlLink = self.launchDetails?.links.youtubeId {
+            self.playWebVideo(urlString: urlLink)
+        }
     }
 }
 

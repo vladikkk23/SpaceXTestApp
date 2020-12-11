@@ -117,15 +117,15 @@ extension LaunchCell {
         self.launchDetails = cellData
         
         // Check if there are any images from flickr, if not then download image from patch
-//        if let originalImageLink = cellData.flickrImages?.original!.first {
-//            self.setupImageView(from: originalImageLink!)
-//        } else if let smallImageLink = cellData.flickrImages?.small.first {
-//            self.setupImageView(from: smallImageLink)
-//        } else {
-//            if let largeImageLink = cellData.patchData?.large {
-//                self.setupImageView(from: largeImageLink)
-//            }
-//        }
+        if let originalImageLink = cellData.links.flickr.original.first, !originalImageLink.isEmpty {
+            self.setupImageView(from: originalImageLink)
+        } else if let smallImageLink = cellData.links.flickr.small.first, !smallImageLink.isEmpty {
+            self.setupImageView(from: smallImageLink)
+        } else {
+            if let largeImageLink = cellData.links.patch.large {
+                self.setupImageView(from: largeImageLink)
+            }
+        }
         
         self.detailsView.setupLabelTitles(title: cellData.name, date: cellData.date.description)
     }

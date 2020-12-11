@@ -39,9 +39,7 @@ class LaunchListVC: UIViewController {
                     DispatchQueue.main.async {
                         // Store data
                         self.launches = launches
-                        
-                        print(launches)
-                        
+                                                
                         // Reload collection view
                         self.launchesView.reloadData()
                     }

@@ -11,7 +11,7 @@ import Foundation
 struct LaunchDataResponse: Decodable {
     let name: String
     let date: Int
-//    let links: LinkData
+    let links: LinkData
     
     let desc: String?
     let rocketName: String
@@ -20,7 +20,7 @@ struct LaunchDataResponse: Decodable {
     enum CodingKeys: String, CodingKey {
         case name
         case date = "date_unix"
-//        case links
+        case links
         case desc = "details"
         case rocketName = "rocket"
         case payloads
@@ -32,21 +32,14 @@ struct LinkData: Decodable {
     let patch: PatchData
     let reddit: RedditData
     let flickr: FlickrData
-    let webcast: String
-    let youtubeId: String
-    let article: String
-    let wikipediaLink: String
-    
-    let presskit: String?
-    
+    let youtubeId: String?
+    let wikipediaLink: String?
+        
     enum CodingKeys: String, CodingKey {
         case patch
         case reddit
         case flickr
-        case presskit
-        case webcast
         case youtubeId = "youtube_id"
-        case article
         case wikipediaLink = "wikipedia"
     }
 }
@@ -73,7 +66,7 @@ struct RedditData: Codable {
 // MARK: - FlickrData
 struct FlickrData: Codable {
     let small: [String]
-    let original: [String?]?
+    let original: [String]
     
     enum CodingKeys: String, CodingKey {
         case small
