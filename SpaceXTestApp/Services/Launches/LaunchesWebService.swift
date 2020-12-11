@@ -14,7 +14,7 @@ class LaunchesWebService {
     private let genericRequests = GenericHTTPRequests()
     
     // URL string
-    private var URLString = "https://api.spacexdata.com/v4/launches/latest"
+    private var URLString = "https://api.spacexdata.com/v4/launches"
     
     // MARK: Methods
     func getLaunches(completionHandler: @escaping (LaunchData?) -> Void) {
@@ -70,6 +70,25 @@ class LaunchesWebService {
                 launchData.wikipediaLink = link
             }
             
+            // Parse data to controller
+            completionHandler(launchData)
+        }
+    }
+    
+    // MARK: Methods
+    func getLaunch(completionHandler: @escaping ([LaunchDataResponse]?) -> Void) {
+        self.genericRequests.HTTPGetRequest(stringURL: self.URLString) { (genericData) in
+            guard let data = genericData else {
+                return
+            }
+                        
+            // Decode data
+            let decoder = JSONDecoder()
+            
+            guard let launchData = try? decoder.decode([LaunchDataResponse].self, from: data) else {
+                return
+            }
+
             // Parse data to controller
             completionHandler(launchData)
         }

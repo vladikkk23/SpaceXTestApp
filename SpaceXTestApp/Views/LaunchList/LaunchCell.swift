@@ -10,7 +10,7 @@ import UIKit
 class LaunchCell: UICollectionViewCell {
     // MARK: Properties
     static let cellID = "LaunchCell"
-    private var launchDetails: LaunchData?
+    private var launchDetails: LaunchDataResponse?
     
     // UI
     lazy var button: UIButton = {
@@ -113,21 +113,21 @@ class LaunchCell: UICollectionViewCell {
 
 // Setup Cell Data
 extension LaunchCell {
-    func setupCellData(withData cellData: LaunchData) {
+    func setupCellData(withData cellData: LaunchDataResponse) {
         self.launchDetails = cellData
         
         // Check if there are any images from flickr, if not then download image from patch
-        if let originalImageLink = cellData.flickrImages?.original.first {
+        if let originalImageLink = cellData.links.flickr.original.first, !originalImageLink.isEmpty {
             self.setupImageView(from: originalImageLink)
-        } else if let smallImageLink = cellData.flickrImages?.small.first {
+        } else if let smallImageLink = cellData.links.flickr.small.first, !smallImageLink.isEmpty {
             self.setupImageView(from: smallImageLink)
         } else {
-            if let largeImageLink = cellData.patchData?.large {
+            if let largeImageLink = cellData.links.patch.large {
                 self.setupImageView(from: largeImageLink)
             }
         }
         
-        self.detailsView.setupLabelTitles(title: cellData.name!, date: cellData.date!)
+        self.detailsView.setupLabelTitles(title: cellData.name, date: cellData.date.description)
     }
     
     // Setup and cache image
