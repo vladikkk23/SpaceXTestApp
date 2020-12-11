@@ -61,8 +61,8 @@ class LaunchDetailsVC: UIViewController {
         self.setupLayout()
         
         // Load video
-        if let urlLink = self.launchDetails?.links.youtubeId {
-            self.playWebVideo(urlString: urlLink)
+        if let videoId = self.launchDetails?.links.youtubeId {
+            self.playWebVideo(youtubeId: videoId)
         }
     }
 }
@@ -95,8 +95,8 @@ extension LaunchDetailsVC {
 
 // Setup video player
 extension LaunchDetailsVC {
-    func playWebVideo(urlString: String) {
-        guard let videoURL = URL(string: urlString) else {
+    func playWebVideo(youtubeId: String) {
+        guard let videoURL = URL(string: "https://www.youtube.com/embed/\(youtubeId)") else {
             NSLog("Failed to create url: \(#line)")
 
             return
