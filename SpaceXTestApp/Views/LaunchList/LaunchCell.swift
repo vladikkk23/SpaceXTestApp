@@ -127,7 +127,7 @@ extension LaunchCell {
             }
         }
         
-        self.detailsView.setupLabelTitles(title: cellData.name, date: cellData.date.description)
+        self.detailsView.setupLabelTitles(title: cellData.name, date: cellData.date)
     }
     
     // Setup and cache image

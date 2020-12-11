@@ -21,7 +21,7 @@ class LaunchRowDetailsView: UIView {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
-        label.backgroundColor = .lightGray
+        label.backgroundColor = .clear
         return label
     }()
     
@@ -74,7 +74,7 @@ class LaunchRowDetailsView: UIView {
 
 // Setup labels
 extension LaunchRowDetailsView {
-    func setupLabelTitles(title: String, date: String) {
+    func setupLabelTitles(title: String, date: Int) {
         self.setupTitleLabelTitle(withTitle: title)
         
         self.setupDateLabelTitle(withTitle: date)
@@ -86,9 +86,17 @@ extension LaunchRowDetailsView {
         }
     }
     
-    private func setupDateLabelTitle(withTitle title: String) {
+    private func setupDateLabelTitle(withTitle date: Int) {
+        // Format date
+        let date = Date(timeIntervalSince1970: Double(date))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+        dateFormatter.locale = NSLocale.current
+        dateFormatter.dateFormat = "MMMM d, yyyy"
+        let strDate = dateFormatter.string(from: date)
+                
         DispatchQueue.main.async {
-            self.dateLabel.attributedText = NSAttributedString(string: title, attributes: [.foregroundColor : UIColor.white, .font : UIFont(name: "Times New Roman", size: 18)!])
+            self.dateLabel.attributedText = NSAttributedString(string: strDate, attributes: [.foregroundColor : UIColor.white, .font : UIFont(name: "Times New Roman", size: 18)!])
         }
     }
 }
